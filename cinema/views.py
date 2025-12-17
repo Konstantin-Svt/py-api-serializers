@@ -1,6 +1,5 @@
 import typing
 
-from django.db.models import QuerySet
 from rest_framework import serializers
 from rest_framework.viewsets import ModelViewSet
 
@@ -45,13 +44,7 @@ class MovieViewSet(ModelViewSet):
 
 
 class MovieSessionViewSet(ModelViewSet):
-    queryset = MovieSession.objects.all()
-
-    def get_queryset(self) -> QuerySet:
-        qs = self.queryset
-        if self.action == "list":
-            qs = qs.select_related("movie", "cinema_hall")
-        return qs
+    queryset = MovieSession.objects.select_related("movie", "cinema_hall")
 
     def get_serializer_class(self) -> typing.Type[serializers.Serializer]:
         if self.action == "list":
